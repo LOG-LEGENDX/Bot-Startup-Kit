@@ -1,0 +1,19 @@
+{
+  "name": "bot-startup-kit",
+  "version": "1.0.0",
+  "description": "A Simple And Useful Discord.JS Bot Kit For Beginners .",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "LegendX",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "fs": "^0.0.1-security",
+    "glob": "^7.1.7",
+    "node-fetch": "^2.6.1",
+    "quick.db": "^7.1.3"
+  }
+}
