@@ -7,7 +7,6 @@ const cooldowns = new Map();
 
 module.exports = async (client, message) => {
 
-   let logschannel = client.channels.cache.find(ch => ch.id === bconfig.botlogschannel);
    let prefix = predb.get(`guild_${message.guild.id}_prefix`) || bconfig.defaultprefix
 
    //Bot Args
@@ -52,7 +51,7 @@ module.exports = async (client, message) => {
 
    } catch (error) {
 
-      logschannel.send("```" + error + "```")
+      console.log(error)
 
    }
 

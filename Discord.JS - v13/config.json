@@ -5,6 +5,5 @@
   "discordinvitelink": "your-discord-server-invite-link",
   "defaultprefix": "your-bot-default-prefix",
   "botago": "86400000",
-  "botreportchannel": "channel-id-where-report-command-send-reports",
-  "botlogschannel": "channel-id-where-bot-logs-send"
+  "botreportchannel": "channel-id-where-report-command-send-reports"
 }
