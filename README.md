@@ -10,8 +10,8 @@ This Kit Contains Following Things :
 
  1. Commands Handler
  2. Event Handler
- 3. Custom Prefix
- 4. Simple Commands - Help , Invite , Prefix , Report , Stats , Setup-Prefix , Reset-Prefix
+ 3. Slash Commands
+ 4. Simple Commands - Help , Invite , Report , Stats
 
 ###  Extras
 

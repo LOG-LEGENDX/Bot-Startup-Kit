@@ -1,85 +1,105 @@
 const Discord = require('discord.js');
 const bconfig = require('../../config.json')
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
-    name: 'report',
-    cooldown: 5,
-    async execute(message, args, client) {
-
+    data: new SlashCommandBuilder()
+        .setName("report")
+        .setDescription("Report Your Issue To My Dev")
+        .addStringOption((option) =>
+            option
+                .setName("issue")
+                .setDescription("Write The Issue You Are Facing")
+                .setRequired(true)
+        ),
+    async execute(interaction) {
+        
         // bot-perm
-        if (!message.guild.me.permissions.has('EMBED_LINKS')) return message.channel.send('Please Give Me **EMBED_LINKS** permission in this channel .')
-        if (!message.guild.me.permissions.has('CREATE_INSTANT_INVITE')) return message.channel.send('Please Give Me **CREATE_INVITE** permission in this guild .')
+        if (!interaction.guild.me.permissionsIn(interaction.channel).has(Discord.Permissions.FLAGS.EMBED_LINKS)) {
 
-        const ReportMessage = args[1]
+            interaction.reply({
 
-        let embednomsg = new Discord.MessageEmbed()
-        embednomsg.setDescription(`• Please Use **${bconfig.defaultprefix}report** command like : **${bconfig.defaultprefix}report your-issue**`)
-        embednomsg.setColor('RED')
-        embednomsg.setFooter({ text:`${message.author.tag}`, iconURL: message.author.displayAvatarURL() });
-        embednomsg.setTimestamp()
+                content: "Please Give Me **EMBED_LINKS** permission in this channel .",
+                ephemeral: true,
 
-        if (!ReportMessage) return message.channel.send({ embeds: [embednomsg] })
+            });
+        }
+        if (!interaction.guild.me.permissions.has(Discord.Permissions.FLAGS.CREATE_INSTANT_INVITE)) {
 
-        let InvLink = await message.channel.createInvite({ maxAge: 0, maxUses: 0 })
+            interaction.reply({
+
+                content: "Please Give Me **CREATE_INVITE** permission in this server .",
+                ephemeral: true,
+
+            });
+        }
+
+        let InvLink = await interaction.channel.createInvite({ maxAge: 0, maxUses: 0 })
 
         let InvLinkUrl = "https://discord.gg/"
-        
+
         let InvLinkCode = InvLink.code
 
         let ReportInvLink = `${InvLinkUrl}` + `${InvLinkCode}`
 
         let embedmemreport = new Discord.MessageEmbed()
-        embedmemreport.setTitle(client.user.username)
+        embedmemreport.setTitle(interaction.client.user.username)
         embedmemreport.setURL(bconfig.websitelink)
         embedmemreport.setDescription(`• You're issue have been succesfully sent to the developers!`)
-        embedmemreport.setThumbnail(client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
+        embedmemreport.setThumbnail(interaction.client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
         embedmemreport.setColor('GREEN')
-        embedmemreport.setFooter({ text: `${message.author.tag}`, iconURL: message.author.displayAvatarURL() });
+        embedmemreport.setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() });
         embedmemreport.setTimestamp()
 
-        message.channel.send({ embeds: [embedmemreport] })
-
         let embedmemtodevreport = new Discord.MessageEmbed()
-        embedmemtodevreport.setTitle(client.user.username)
+        embedmemtodevreport.setTitle(interaction.client.user.username)
         embedmemtodevreport.setURL(bconfig.websitelink)
         embedmemtodevreport.setDescription("Report Panel Here :-")
         embedmemtodevreport.addFields([
             {
                 "name": "Reporter Name",
-                "value": "```" + `${message.author.tag}` + "```",
+                "value": "```" + `${interaction.user.tag}` + "```",
                 "inline": true
             },
             {
                 "name": "Reporter ID",
-                "value": "```" + `${message.author.id}` + "```",
+                "value": "```" + `${interaction.user.id}` + "```",
                 "inline": true
             },
             {
                 "name": "Reported Guild Name",
-                "value": "```" + `${message.guild.name}` + "```",
+                "value": "```" + `${interaction.guild.name}` + "```",
                 "inline": true
             },
             {
                 "name": "Reported Guild ID",
-                "value": "```" + `${message.guild.id}` + "```",
+                "value": "```" + `${interaction.guild.id}` + "```",
                 "inline": true
             },
             {
                 "name": "Reported Guild Invite Link",
-                "value": `[Here](${ReportInvLink})`,
+                "value": "```" + `${ReportInvLink}` + "```",
                 "inline": true
             },
             {
                 "name": "Reported Issue",
-                "value": "```" + `${ReportMessage}` + "```"
+                "value": "```" + `${interaction.options.getString("issue")}` + "```"
             }
         ])
         embedmemtodevreport.setColor('YELLOW');
-        embedmemtodevreport.setThumbnail(client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
-        embedmemtodevreport.setFooter({ text: `${message.author.tag}`, iconURL: message.author.displayAvatarURL() });
+        embedmemtodevreport.setThumbnail(interaction.client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
+        embedmemtodevreport.setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() });
         embedmemtodevreport.setTimestamp();
 
-        client.channels.cache.get(bconfig.botreportchannel).send({ embeds: [embedmemtodevreport] })
+        interaction.client.channels.cache.get(bconfig.botreportchannel).send({
 
+            embeds: [embedmemtodevreport]
+
+        });
+
+        interaction.reply({
+            embeds: [embedmemreport],
+            ephemeral: true,
+        });
     }
 }

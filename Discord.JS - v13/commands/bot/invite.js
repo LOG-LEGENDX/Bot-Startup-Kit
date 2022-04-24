@@ -1,26 +1,44 @@
 const Discord = require('discord.js');
 const bconfig = require('../../config.json')
+const { SlashCommandBuilder } = require("@discordjs/builders");
 
 module.exports = {
-    name: 'invite',
-    cooldown: 5,
-    execute(message, _args, client) {
+   data: new SlashCommandBuilder()
+      .setName("invite")
+      .setDescription("Gives My Invite Link"),
+   async execute(interaction) {
 
-        // bot-perm
-        if (!message.guild.me.permissions.has('EMBED_LINKS')) return message.channel.send('Please Give Me **EMBED_LINKS** permission in this channel .')
+      // bot-perm
+      if (!interaction.guild.me.permissionsIn(interaction.channel).has(Discord.Permissions.FLAGS.EMBED_LINKS)) {
 
-        let invlink = `[Here](${bconfig.botinvitelink})`
+         interaction.reply({
 
-        let embedInvite = new Discord.MessageEmbed();
-        embedInvite.setTitle(client.user.username)
-        embedInvite.setURL(bconfig.websitelink)
-        embedInvite.setDescription("Invite Link Panel Here :-")
-        embedInvite.addField("Invite", invlink)
-        embedInvite.setColor("BLUE");
-        embedInvite.setThumbnail(client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
-        embedInvite.setFooter({ text: `${message.author.tag}`, iconURL: message.author.displayAvatarURL() });
-        embedInvite.setTimestamp();
-        message.channel.send({ embeds: [embedInvite] });
+            content: "Please Give Me **EMBED_LINKS** permission in this channel .",
+            ephemeral: true,
 
-    }
+         });
+      }
+
+      const row = new Discord.MessageActionRow()
+         .addComponents(
+            new Discord.MessageButton()
+               .setLabel("Invite")
+               .setStyle('LINK')
+               .setURL(bconfig.botinvitelink),
+         )
+
+      let embedInvite = new Discord.MessageEmbed();
+      embedInvite.setTitle(interaction.client.user.username)
+      embedInvite.setURL(bconfig.websitelink)
+      embedInvite.setDescription("Click On The Button Below")
+      embedInvite.setColor("BLUE");
+      embedInvite.setThumbnail(interaction.client.user.displayAvatarURL({ format: "png", size: 128, dynamic: true }))
+      embedInvite.setFooter({ text: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() });
+      embedInvite.setTimestamp();
+
+      interaction.reply({
+         embeds: [embedInvite],
+         components: [row]
+      });
+   }
 }

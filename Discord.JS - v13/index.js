@@ -6,22 +6,22 @@ const bconfig = require("./config.json");
 const glob = require('glob');
 
 // Bot Command Handler
+const commands = [];
 client.commands = new Collection();
 const cmdFiles = glob.sync('./commands/**/*.js');
 for (const file of cmdFiles) {
   const command = require(file);
-  client.commands.set(command.name, command);
+  commands.push(command.data.toJSON());
+  client.commands.set(command.data.name, command);
 }
 
-// Bot Event Handler
+// Bot Events Handler
 fs.readdir('./events', (err, files) => {
   if (err) return console.log(err);
   files.forEach((file) => {
     if (!file.endsWith('.js')) return;
     const event = require(`./events/${file}`);
-    const eventName = file.split('.')[0];
-    client.on(eventName, event.bind(null, client));
-    delete require.cache[require.resolve(`./events/${file}`)];
+    client.on(event.name, (...args) => event.execute(...args, commands));
   });
 });
 

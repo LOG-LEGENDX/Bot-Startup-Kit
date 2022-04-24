@@ -3,7 +3,6 @@
   "botinvitelink": "your-bot-invite-link",
   "bottoken": "your-bot-token",
   "discordinvitelink": "your-discord-server-invite-link",
-  "defaultprefix": "your-bot-default-prefix",
   "botago": "86400000",
   "botreportchannel": "channel-id-where-report-command-send-reports"
 }
