@@ -15,5 +15,6 @@ This Kit Contains Following Things :
 
 ###  Extras
 
- - **[Docs](https://docs.log-network.me/)**
+ - **[Docs](https://bots.log-network.me/docs)**
+ - **[FAQ's](https://bots.log-network.me/faqs)**
  - **[Developer Contact](https://log-network.me/contact)**
